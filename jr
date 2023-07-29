@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Define functions
+PRINT_HELP() {
+    echo "-------------------------------------------"
+    echo "A tool for managing jamie's remote machines"
+    echo "-------------------------------------------"
+    echo "Usage:"
+    echo "  jr [Commands]"
+    echo "Commands:"
+    echo "  list                    Show machine ip list"
+    echo "  edit                    Use vim to edit ssh configs"
+    echo "  [Machines]              Enter machine"
+    PRINT_LIST
+}
+
+PRINT_LIST() {
+    echo "Avaliable Machines:"
+    cat ~/.ssh/config | sed -n 's/Host//p' | sed 's/Name//g' | sed 'N;s/\n//'
+}
+
+if [ "$1" = "list" ]; then
+    PRINT_LIST
+    exit 0
+elif [ "$1" = "help" ]; then
+    PRINT_HELP
+    exit 0
+elif [ "$1" = "edit" ]; then
+    vim ~/.ssh/config
+else
+    ssh $1 -t zsh
+fi
